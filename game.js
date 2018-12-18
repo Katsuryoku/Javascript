@@ -13,9 +13,12 @@ var context = canvas.getContext("2d");
 	var screen = 'start'; // Name of the UI to draw
 	var ready = true; // Ability to launch a new game
 	var bug = false; // a funny bug (not so funny since grave disapear)
+	var littleFir   = {type: 1, size: 1, spawnAfter: 0};
+	var bigFir   = {type: 2, size: 1, spawnAfter: 0};
+	var spawnAtRandom = [littleFir, bigFir];
 	// Elements
 	//var santa = new santa();
-	//var firs = [];
+	var firs = [];
 	//var pixies = [];
 	// Player
 	var score;
@@ -48,12 +51,17 @@ function startGame() {
 	ready = false; // unable to launch a new game
 	// Update :
 	timeFunctionId = setInterval( function() { time++; }, 1000);
+	updateFirFunctionId = setInterval(updateFirFunction, 10000); // change every 200ms
 	spawnCheckTime = setInterval( function() {
-		z = spawn(time)
+		f = spawn(time);
+		if (f !== undefined){ // if a zombie spawned this time
+	    	firs.push(f); // keep track of it
+	    }
 	}, 1000);
 }
 function endGame() {
 	clearInterval(timeFunctionId);
+	clearInterval(updateFirFunctionId);
 	if (money > 0 && gift <= 0) {
 		console.log("WON");
 		screen = 'won';
@@ -81,6 +89,19 @@ function spawn(playTime) { // called every second.
 	// spawn every two seconds when playTime < 140 :
 	if (playTime < 140 && playTime % 2 == 1) {
 		return;
+	}
+
+	let canSpawn = [];
+	for (let i in spawnAtRandom){
+		ft = spawnAtRandom[i];
+		if(ft.spawnAfter <= playTime) {
+			canSpawn.push(ft);
+		}
+	}
+	ft = canSpawn[Math.floor(Math.random()*canSpawn.length)];
+	if (ft !== undefined) {
+		console.log("Spawned random : "+ft.type);
+		return new Fir(ft);
 	}
 }
 function drawBackGround() {
