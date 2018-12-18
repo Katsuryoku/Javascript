@@ -1,0 +1,9 @@
+body {
+    background-color: #100505;
+}
+
+#cv {
+    display: block;
+    margin: 50px auto;
+	cursor: none;
+}
