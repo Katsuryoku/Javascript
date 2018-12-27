@@ -29,6 +29,9 @@ var context = canvas.getContext("2d");
 	var startText = ["Les lutins sont des gilets jaunes !",
 	"Ils en veulent au père noël de ne pas vouloir les payer !",
 	"Survivez sans rien payer, vive l'argent !"];
+	var santa = new Santa();
+	var move = false ;
+
 
 /////////////////////////////////////////// Main //////////////////////////////////////////////////////////
 
@@ -46,6 +49,7 @@ function startGame() {
 	gift = 100;
 	time = 0;
 	money = 100;
+	santa.drawSanta();
 	// UI :
 	screen = 'game';
 	ready = false; // unable to launch a new game
@@ -162,20 +166,41 @@ function drawHUD() {
 			break;
 	}
 }
-// Add event listener for 'mousedown' events (because 'click' is mouseup :( )
-canvas.addEventListener('mousedown', function(event) {
 
-    // start the game if it is not :
-    if (ready == true) {
+document.onkeydown = function (e) {
+	
+	if (ready == true) {
 		startGame();
     }
-
+    if (santa.direction=== undefined) {
+		return;
+	}
     if (screen == 'game') {
+    	santa.sy = santa.direction[e.key];
+    	drawBackGround();
+		drawHUD();
+    	santa.moveSanta(e.key);
+    	move = true;
 	}
 
-}, false);
+	
+	
+	
+	
+	
+	};
+
+
 function animate() { // function called at each frame which handles graphic rendering
+
+	if(move==true){
+	var x = setTimeout(function() { move=false; }, 1000);}
+	
+	else{
 	drawBackGround();
 	drawHUD();
+	if(ready != true){
+	santa.drawSanta();}
+		}
     requestAnimationFrame(animate);
 }

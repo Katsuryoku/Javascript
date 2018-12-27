@@ -2,7 +2,7 @@ var cs = document.getElementById("cv");
 var ctx = cs.getContext("2d");
 
 var firs = new Image();
-firs.src = "firs.png";
+firs.src = "tree.png";
 
 class Fir{
 	constructor(type, size){
