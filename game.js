@@ -17,9 +17,11 @@ var context = canvas.getContext("2d");
 	var bigFir   = {type: 2, size: 1, spawnAfter: 0};
 	var spawnAtRandom = [littleFir, bigFir];
 	// Elements
-	//var santa = new santa();
+	
 	var firs = [];
-	//var pixies = [];
+	var santa = new Santa();
+	var move = false ;
+	var lLutin = [];
 	// Player
 	var score;
 	var gift;
@@ -29,8 +31,7 @@ var context = canvas.getContext("2d");
 	var startText = ["Les lutins sont des gilets jaunes !",
 	"Ils en veulent au père noël de ne pas vouloir les payer !",
 	"Survivez sans rien payer, vive l'argent !"];
-	var santa = new Santa();
-	var move = false ;
+	
 
 
 /////////////////////////////////////////// Main //////////////////////////////////////////////////////////
@@ -38,7 +39,32 @@ var context = canvas.getContext("2d");
 animate(); // Launch the drawing function, which will then be called at each frame
 
 /////////////////////////////////////////// Functions /////////////////////////////////////////////////////
-// Game Manager
+
+
+
+function moveLutins(){
+
+		for(var i =0;i<lLutin.length;i++){
+			var r = Math.floor(Math.random()*4);
+			lLutin[i].moveLutin(r);
+		}
+}
+
+function updateFirAndLutinFunction(){
+
+	drawBackGround();
+	drawHUD();
+	santa.drawSanta();
+	lLutin.push(new Lutin(santa.x,santa.y,firs,lLutin));
+	for(var i =0;i<firs.length;i++){
+		//firs[i].drawFir();
+	}
+	for(var i =0;i<lLutin.length;i++){
+
+		lLutin[i].drawLutin();
+	}
+	
+}
 
 function startGame() {
 	console.log("START GAME");
@@ -54,8 +80,11 @@ function startGame() {
 	screen = 'game';
 	ready = false; // unable to launch a new game
 	// Update :
+	updateMoveLutins = setInterval( function() {
+		if((time%2)===0 && time<190){ moveLutins();}
+		if(time>=190){moveLutins();}},1000)
 	timeFunctionId = setInterval( function() { time++; }, 1000);
-	updateFirFunctionId = setInterval(updateFirFunction, 10000); // change every 200ms
+	updateFirFunctionId = setInterval(updateFirAndLutinFunction, 10000); // change every 10s
 	spawnCheckTime = setInterval( function() {
 		f = spawn(time);
 		if (f !== undefined){ // if a zombie spawned this time
@@ -66,6 +95,7 @@ function startGame() {
 function endGame() {
 	clearInterval(timeFunctionId);
 	clearInterval(updateFirFunctionId);
+	clearInterval(updateMoveLutins);
 	if (money > 0 && gift <= 0) {
 		console.log("WON");
 		screen = 'won';
@@ -90,11 +120,7 @@ function spawn(playTime) { // called every second.
 		endGame();
 		return;
 	}
-	// spawn every two seconds when playTime < 140 :
-	if (playTime < 140 && playTime % 2 == 1) {
-		return;
-	}
-
+	
 	let canSpawn = [];
 	for (let i in spawnAtRandom){
 		ft = spawnAtRandom[i];
@@ -104,7 +130,7 @@ function spawn(playTime) { // called every second.
 	}
 	ft = canSpawn[Math.floor(Math.random()*canSpawn.length)];
 	if (ft !== undefined) {
-		console.log("Spawned random : "+ft.type);
+		//console.log("Spawned random : "+ft.type);
 		return new Fir(ft);
 	}
 }
@@ -137,7 +163,7 @@ function drawHUD() {
 				birghtenBackGround(0, 0, 150, 100);
 			context.fillText("Cadeaux : "+ gift, 10, 20);
 			context.fillText("Monnaie : "+ money, 10, 40);
-			context.fillText("Temps : " + (200 - time), 10, 60);
+			context.fillText("Temps : " + (210 - time), 10, 60);
 			context.fillText("Score : " + score, 10, 80);
 			break;
 		case 'start':
@@ -179,6 +205,13 @@ document.onkeydown = function (e) {
     	santa.sy = santa.direction[e.key];
     	drawBackGround();
 		drawHUD();
+		for(var i =0;i<firs.length;i++){
+			//firs[i].drawFir();
+		}
+		for(var i =0;i<lLutin.length;i++){
+
+			lLutin[i].drawLutin();
+		}
     	santa.moveSanta(e.key);
     	move = true;
 	}
@@ -199,6 +232,14 @@ function animate() { // function called at each frame which handles graphic rend
 	else{
 	drawBackGround();
 	drawHUD();
+	
+	for(var i =0;i<firs.length;i++){
+		//firs[i].drawFir();
+	}
+	for(var i =0;i<lLutin.length;i++){
+
+		lLutin[i].drawLutin();
+	}
 	if(ready != true){
 	santa.drawSanta();}
 		}
