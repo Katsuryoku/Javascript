@@ -33,6 +33,7 @@ var context = canvas.getContext("2d");
 	var timeFunctionId;
 	var updateFirFunctionId;
 	var spawnCheckTime;
+	var lutinSpeed = 500;
 
 
 /////////////////////////////////////////// Main //////////////////////////////////////////////////////////
@@ -46,9 +47,9 @@ animate(); // Launch the drawing function, which will then be called at each fra
 function moveLutins(){
 
 		for(let i =0;i<lLutin.length;i++){
-			let r = Math.floor(Math.random()*4);
-			lLutin[i].moveLutin(r);
-		}
+			lLutin[i].moveLutin();
+		};
+		animate();
 }
 
 function updateFirAndLutinFunction(){
@@ -79,15 +80,14 @@ function startGame() {
 	gift = 100;
 	time = 0;
 	money = 100;
+	lutinSpeed = 200;
 	updateFirAndLutinFunction();
 
 	// UI :
 	screen = 'game';
 	ready = false; // unable to launch a new game
 	// Update :
-	 updateMoveLutins = setInterval( function() {
-		if(time<190){ moveLutins();}
-		if(time>=190){moveLutins();}},500)
+	updateMoveLutins = setInterval( function() {moveLutins();},lutinSpeed);
 	 timeFunctionId = setInterval( function() { time++; }, 1000);
 	 updateFirFunctionId = setInterval(updateFirAndLutinFunction, 10000); // change every 10s
 	 spawnCheckTime = setInterval( function() {
@@ -98,6 +98,7 @@ function endGame() {
 	clearInterval(timeFunctionId);
 	clearInterval(updateFirFunctionId);
 	clearInterval(updateMoveLutins);
+	clearInterval(updateMoveLutin2);
 	lLutin=[];
 	firs=[];
 	if (money > 0 && gift <= 0) {
@@ -114,6 +115,10 @@ function endGame() {
 function spawn(playTime) { // called every second.
 	if (playTime > 210)  {
 		endGame();
+		return;
+	}
+	if (playTime>190){
+		lutinSpeed = 100;
 		return;
 	}
 	if (money <= 0)  {
@@ -202,7 +207,6 @@ document.onkeydown = function (e) {
     	santa.moveSanta(e.key);
     	move = true;
 	}
-
 	
 	
 	
@@ -237,10 +241,8 @@ function animate() { // function called at each frame which handles graphic rend
 	
 	drawFirs();
 	drawLutins();
-	if(ready != true){
 	santa.drawSanta();}
-		}
-    requestAnimationFrame(animate);
+    //requestAnimationFrame(animate);
 }
 
 
@@ -252,12 +254,12 @@ function verify(){
 		}
 		else{i+=1;}
 	}
-	let j = 0;
-	while(j<lLutin.length){
+	// let j = 0;
+	// while(j<lLutin.length){
 
-		if(!lLutin[j].verify()){
-			lLutin.splice(j,1);
-		}
-		else{j+=1;}
-	}
+	// 	if(!lLutin[j].verify()){
+	// 		lLutin.splice(j,1);
+	// 	}
+	// 	else{j+=1;}
+	// }
 }
