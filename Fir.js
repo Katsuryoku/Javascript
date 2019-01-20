@@ -17,10 +17,15 @@ class Fir{
 	}
 
 	drawFir(){
-		if(this.types==="pasDecore"){
-		ctx.drawImage(firIm,293,212,60 ,80 ,this.x, this.y,63 ,90 );}
+		if (this.used){}
 		else{
-		ctx.drawImage(firIm,293,295,59 ,93 ,this.x, this.y,63 ,90 );}
+			if(this.types==="pasDecore"){
+				ctx.drawImage(firIm,293,212,60 ,80 ,this.x, this.y,63 ,90 );
+			}
+			else{
+				ctx.drawImage(firIm,293,295,59 ,93 ,this.x, this.y,63 ,90 );
+			}
+		}
 	}
 
 

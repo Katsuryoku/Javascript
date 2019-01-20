@@ -34,6 +34,7 @@ var context = canvas.getContext("2d");
 	var updateFirFunctionId;
 	var spawnCheckTime;
 	var lutinSpeed = 500;
+	var hitLutin = false;
 
 
 /////////////////////////////////////////// Main //////////////////////////////////////////////////////////
@@ -95,10 +96,10 @@ function startGame() {
 	}, 1000);
 }
 function endGame() {
+	clearInterval(spawnCheckTime);
 	clearInterval(timeFunctionId);
 	clearInterval(updateFirFunctionId);
 	clearInterval(updateMoveLutins);
-	clearInterval(updateMoveLutin2);
 	lLutin=[];
 	firs=[];
 	if (money > 0 && gift <= 0) {
@@ -211,7 +212,6 @@ document.onkeydown = function (e) {
 	
 	
 	
-	
 	};
 
 
@@ -219,12 +219,24 @@ function drawFirs(){
 
 	for(let i =0;i<firs.length;i++){
 		firs[i].drawFir();
+		if(verifySanta(santa.x,santa.y,firs[i].x,firs[i].y) && !firs[i].used){
+			if(firs[i].types==="pasDecore"){
+				gift = gift-5;
+			}else{
+				gift = gift-10;
+			}
+			firs[i].used = true;
+		}
 	}
 }
 
 function drawLutins(){
 	for(let i =0;i<lLutin.length;i++){
-
+		if(verifySanta(lLutin[i].x,lLutin[i].y,santa.x,santa.y) && !hitLutin){
+			money = money-5;
+			hitLutin = true;
+			var x = setTimeout(function() { hitLutin=false; }, 500);
+		}
 		lLutin[i].drawLutin();
 	}
 }
@@ -232,7 +244,7 @@ function drawLutins(){
 function animate() { // function called at each frame which handles graphic rendering
 
 	if(move==true){
-	var x = setTimeout(function() { move=false; }, 1000);}
+	var x = setTimeout(function() { move=false; }, 100);}
 	
 	else{
 	context.clearRect(0, 0, canvas.width, canvas.height);
@@ -263,3 +275,10 @@ function verify(){
 	// 	else{j+=1;}
 	// }
 }
+function verifySanta(xMoved,yMoved, xFixed,yFixed){
+		if (xMoved>=xFixed && xMoved<=xFixed+63 && yMoved>=yFixed && yMoved<=yFixed+90){
+			return true;
+		}else{
+			return false;
+		}
+	}

@@ -42,7 +42,6 @@ var cs = document.getElementById("cv");
 
 		}
 
-
 		drawLutin(){
 
 			
