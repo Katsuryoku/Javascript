@@ -106,12 +106,17 @@ function endGame() {
 	if (money > 0 && gift <= 0) {
 		console.log("WON");
 		screen = 'won';
+		drawHUD();
 	}
 	else {
 		console.log("LOSE");
 		screen = 'lose';
+		drawHUD();
 	}
-	setTimeout(function() { ready = true; console.log('ready')}, 1500); // Wait 1.5s before being able
+	setTimeout(function() { 
+		ready = true; 
+		console.log('ready');
+		drawHUD();}, 1500); // Wait 1.5s before being able
 		// to restart by clicking, so that the user can see the won/lose screen even if he spam click
 }
 function spawn(playTime) { // called every second.
