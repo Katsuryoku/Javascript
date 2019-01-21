@@ -51,14 +51,14 @@ function moveLutins(){
 		for(let i =0;i<lLutin.length;i++){
 			lLutin[i].moveLutin();
 		};
-		animate();
+		//animate();
 }
 
 function updateFirAndLutinFunction(){
 
-	drawBackGround();
-	drawHUD();
-	santa.drawSanta();
+	//drawBackGround();
+	//drawHUD();
+	//santa.drawSanta();
 	
 	if(Math.random()<0.3){
 		firs.push(new Fir("decore"));
@@ -70,8 +70,8 @@ function updateFirAndLutinFunction(){
 		lLutin.push(new Lutin(santa.x,santa.y,firs,lLutin,"pasDecore"));
 	}
 	verify();
-	drawFirs();
-	drawLutins();
+	//drawFirs();
+	//drawLutins();
 	
 }
 
@@ -134,11 +134,13 @@ function spawn(playTime) { // called every second.
 	
 }
 function drawBackGround() {
-	for (let i = 0; i < 14; i++) {
-		for (let j = 0; j < 10; j++) {
-			context.drawImage(bg, 64*i, 64*j);
-		}
-	}
+	//for (let i = 0; i < 14; i++) {
+	//	for (let j = 0; j < 10; j++) {
+	//		context.drawImage(bg, 64*i, 64*j);
+	//	}
+	//}
+	context.drawImage(bg, 0, 0,800,600);
+
 };
 function birghtenBackGround(x=0, y=0, width=canvas.width, height=canvas.height) {
 	// store old drawing color
@@ -194,13 +196,19 @@ function drawHUD() {
 
 document.onkeydown = function (e) {
 	
+
+
 	if (ready == true) {
 		startGame();
     }
-    if (santa.direction=== undefined) {
-		return;
+    if (santa.direction=== undefined ) {
+		drawBackGround();
+		drawHUD();
+		drawFirs();
+		drawLutins();
+    	santa.drawSanta();
 	}
-    if (screen == 'game') {
+    else if (screen == 'game') {
     	santa.sy = santa.direction[e.key];
     	drawBackGround();
 		drawHUD();
@@ -219,8 +227,8 @@ document.onkeydown = function (e) {
 function drawFirs(){
 
 	for(let i =0;i<firs.length;i++){
-		firs[i].drawFir();
-		if(verifySanta(santa.x,santa.y,firs[i].x,firs[i].y) && !firs[i].used){
+		
+		if(verifySantaFirs(santa.x,santa.y,firs[i].x,firs[i].y) && !firs[i].used){
 			if(firs[i].types==="pasDecore"){
 				gift = gift-5;
 			}else{
@@ -228,12 +236,15 @@ function drawFirs(){
 			}
 			firs[i].used = true;
 		}
+		if(!firs[i].used){
+			firs[i].drawFir();
+		}
 	}
 }
 
 function drawLutins(){
 	for(let i =0;i<lLutin.length;i++){
-		if(verifySanta(lLutin[i].x,lLutin[i].y,santa.x,santa.y) && !hitLutin){
+		if(verifySantaLutins(santa.x,santa.y,lLutin[i].x,lLutin[i].y) && !hitLutin){
 			money = money-5;
 			hitLutin = true;
 			var x = setTimeout(function() { hitLutin=false; }, 500);
@@ -245,7 +256,8 @@ function drawLutins(){
 function animate() { // function called at each frame which handles graphic rendering
 
 	if(move==true){
-	var x = setTimeout(function() { move=false; }, 100);}
+		var x = setTimeout(function() { move=false; }, 100);
+	}
 	
 	else{
 	context.clearRect(0, 0, canvas.width, canvas.height);
@@ -254,8 +266,10 @@ function animate() { // function called at each frame which handles graphic rend
 	
 	drawFirs();
 	drawLutins();
+	if(screen==="game"){
 	santa.drawSanta();}
-    //requestAnimationFrame(animate);
+}
+    requestAnimationFrame(animate);
 }
 
 
@@ -276,11 +290,18 @@ function verify(){
 	// 	else{j+=1;}
 	// }
 }
-function verifySanta(xMoved,yMoved, xFixed,yFixed){
-		if (xMoved>=xFixed && xMoved<=xFixed+63 && yMoved>=yFixed && yMoved<=yFixed+90){
+function verifySantaFirs(xMoved,yMoved, xFixed,yFixed){
+		if (xMoved+35>=xFixed && xMoved+35<=xFixed+63 && yMoved+50>=yFixed && yMoved+50<=yFixed+90){
 			return true;
 		}else{
 			return false;
 		}
 	}
 
+function verifySantaLutins(xMoved,yMoved, xFixed,yFixed){
+		if (xMoved+35>=xFixed && xMoved+35<=xFixed+50 && yMoved+50>=yFixed && yMoved+50<=yFixed+50){
+			return true;
+		}else{
+			return false;
+		}
+	}

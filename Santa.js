@@ -27,7 +27,12 @@ class Santa {
 	
 
 	drawSanta() {
-	ctx.drawImage(santaIm, 70, this.sy,70,100,this.x,this.y,70,105);
+		if(this.sy===111 || this.sy===306 || this.sy===10 || this.sy===215) {
+			ctx.drawImage(santaIm, 70, this.sy,70,100,this.x,this.y,70,105);
+		}
+		else{
+			ctx.drawImage(santaIm, 70, 215,70,100,this.x,this.y,70,105);
+		}
 	}
 
 	choix (s){
@@ -77,6 +82,10 @@ class Santa {
 					this.y=this.y+8;
 				}
 				return this.countDown;
+				break;
+
+			default : 
+				return 0;
 			
 		}
 	}
