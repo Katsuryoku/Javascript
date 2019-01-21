@@ -9,7 +9,7 @@ var cs = document.getElementById("cv");
 	class Lutin{
 
 
-		constructor(xSanta,ySanta,lSapin,lLutin){
+		constructor(xSanta,ySanta,lSapin,lLutin,type){
 			
 			var booli = false;
 			this.direction = {
@@ -20,6 +20,8 @@ var cs = document.getElementById("cv");
 			};
 			this.sy = this.direction["Down"];
 			this.count=0;
+			this.counter=0;
+			this.types=type;
 			do{
 				this.x=Math.floor(Math.random()*731);
 				this.y=Math.floor(Math.random()*496);
@@ -122,6 +124,22 @@ var cs = document.getElementById("cv");
 
 		}
 
+
+	verify(){
+		if (this.types==="pasDecore" && this.counter===2){
+			
+			return false;
+		}
+		else if(this.types==="decore" && this.counter===1){
+			
+			return false;
+		}
+		else{
+			this.counter+=1;
+			return true;}
+
 	}
+
+}
 
 

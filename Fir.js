@@ -1,20 +1,40 @@
 var cs = document.getElementById("cv");
 var ctx = cs.getContext("2d");
 
-var firs = new Image();
-firs.src = "tree.png";
+var firIm = new Image();
+firIm.src = "tree.png";
+
 
 class Fir{
-	constructor(type, size){
-		this.position = {x: Math.floor(Math.random()*(600-73*this.size)), y: Math.floor(Math.random()*100)};
-		this.size = size;
+
+	//type =  decore pasDecore
+	constructor(type){
+		this.x= Math.floor(Math.random()*727);
+		this.y= Math.floor(Math.random()*527);
 		this.types = type;
-		this.timeSinceSpawned = 0;
+		this.counter = 0;
+		this.used = false; //si le sapin a été pris par le père noel passe en true
 	}
 
 	drawFir(){
-		ctx.drawImage(firs,
-			this.types % 2 * 80, Math.floor(this.types / 2) * 121, 80, 121,
-			this.firPosition.x, this.firPosition.y, this.size*73, this.size*97);
+		if(this.types==="pasDecore"){
+		ctx.drawImage(firIm,293,212,60 ,80 ,this.x, this.y,63 ,90 );}
+		else{
+		ctx.drawImage(firIm,293,295,59 ,93 ,this.x, this.y,63 ,90 );}
+	}
+
+
+	verify(){
+		if (this.types==="pasDecore" && this.counter===2){
+			
+			return false;
+		}
+		else if(this.types==="decore" && this.counter===1){
+			
+			return false;
+		}
+		else{
+			this.counter+=1;
+			return true;}
 	}
 }
