@@ -1,3 +1,4 @@
+
 // Context
 
 'use strict';
@@ -33,6 +34,8 @@ var context = canvas.getContext("2d");
 	var timeFunctionId;
 	var updateFirFunctionId;
 	var spawnCheckTime;
+	var lutinSpeed = 500;
+	var hitLutin = false;
 
 
 /////////////////////////////////////////// Main //////////////////////////////////////////////////////////
@@ -46,9 +49,9 @@ animate(); // Launch the drawing function, which will then be called at each fra
 function moveLutins(){
 
 		for(let i =0;i<lLutin.length;i++){
-			let r = Math.floor(Math.random()*4);
-			lLutin[i].moveLutin(r);
-		}
+			lLutin[i].moveLutin();
+		};
+		animate();
 }
 
 function updateFirAndLutinFunction(){
@@ -79,15 +82,14 @@ function startGame() {
 	gift = 100;
 	time = 0;
 	money = 100;
+	lutinSpeed = 200;
 	updateFirAndLutinFunction();
 
 	// UI :
 	screen = 'game';
 	ready = false; // unable to launch a new game
 	// Update :
-	 updateMoveLutins = setInterval( function() {
-		if(time<190){ moveLutins();}
-		if(time>=190){moveLutins();}},500)
+	updateMoveLutins = setInterval( function() {moveLutins();},lutinSpeed);
 	 timeFunctionId = setInterval( function() { time++; }, 1000);
 	 updateFirFunctionId = setInterval(updateFirAndLutinFunction, 10000); // change every 10s
 	 spawnCheckTime = setInterval( function() {
@@ -95,6 +97,7 @@ function startGame() {
 	}, 1000);
 }
 function endGame() {
+	clearInterval(spawnCheckTime);
 	clearInterval(timeFunctionId);
 	clearInterval(updateFirFunctionId);
 	clearInterval(updateMoveLutins);
@@ -114,6 +117,10 @@ function endGame() {
 function spawn(playTime) { // called every second.
 	if (playTime > 210)  {
 		endGame();
+		return;
+	}
+	if (playTime>190){
+		lutinSpeed = 100;
 		return;
 	}
 	if (money <= 0)  {
@@ -202,8 +209,6 @@ document.onkeydown = function (e) {
     	santa.moveSanta(e.key);
     	move = true;
 	}
-
-	
 	
 	
 	
@@ -215,12 +220,24 @@ function drawFirs(){
 
 	for(let i =0;i<firs.length;i++){
 		firs[i].drawFir();
+		if(verifySanta(santa.x,santa.y,firs[i].x,firs[i].y) && !firs[i].used){
+			if(firs[i].types==="pasDecore"){
+				gift = gift-5;
+			}else{
+				gift = gift-10;
+			}
+			firs[i].used = true;
+		}
 	}
 }
 
 function drawLutins(){
 	for(let i =0;i<lLutin.length;i++){
-
+		if(verifySanta(lLutin[i].x,lLutin[i].y,santa.x,santa.y) && !hitLutin){
+			money = money-5;
+			hitLutin = true;
+			var x = setTimeout(function() { hitLutin=false; }, 500);
+		}
 		lLutin[i].drawLutin();
 	}
 }
@@ -228,7 +245,7 @@ function drawLutins(){
 function animate() { // function called at each frame which handles graphic rendering
 
 	if(move==true){
-	var x = setTimeout(function() { move=false; }, 1000);}
+	var x = setTimeout(function() { move=false; }, 100);}
 	
 	else{
 	context.clearRect(0, 0, canvas.width, canvas.height);
@@ -237,10 +254,8 @@ function animate() { // function called at each frame which handles graphic rend
 	
 	drawFirs();
 	drawLutins();
-	if(ready != true){
 	santa.drawSanta();}
-		}
-    requestAnimationFrame(animate);
+    //requestAnimationFrame(animate);
 }
 
 
@@ -252,12 +267,20 @@ function verify(){
 		}
 		else{i+=1;}
 	}
-	let j = 0;
-	while(j<lLutin.length){
+	// let j = 0;
+	// while(j<lLutin.length){
 
-		if(!lLutin[j].verify()){
-			lLutin.splice(j,1);
-		}
-		else{j+=1;}
-	}
+	// 	if(!lLutin[j].verify()){
+	// 		lLutin.splice(j,1);
+	// 	}
+	// 	else{j+=1;}
+	// }
 }
+function verifySanta(xMoved,yMoved, xFixed,yFixed){
+		if (xMoved>=xFixed && xMoved<=xFixed+63 && yMoved>=yFixed && yMoved<=yFixed+90){
+			return true;
+		}else{
+			return false;
+		}
+	}
+

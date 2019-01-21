@@ -1,3 +1,4 @@
+
 var cs = document.getElementById("cv");
 var ctx = cs.getContext("2d");
 
@@ -37,4 +38,5 @@ class Fir{
 			this.counter+=1;
 			return true;}
 	}
+
 }
