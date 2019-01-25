@@ -24,7 +24,7 @@ var cs = document.getElementById("cv");
 			this.count=0;
 			this.counter=0;
 			this.types=type;
-			do{
+			
 				this.x=Math.floor(Math.random()*731);
 				this.y=Math.floor(Math.random()*496);
 				for(var i =0;i<lSapin.length;i++){
@@ -39,7 +39,7 @@ var cs = document.getElementById("cv");
 				}
 
 
-			}while((this.x>xSanta && this.x<xSanta+70 && this.y>ySanta && this.y<ySanta+105)||booli);
+			
 
 		}
 
@@ -71,17 +71,17 @@ var cs = document.getElementById("cv");
 		}
 
 
-		moveLutin(){
+		moveLutin(a){
 			this.count=(this.count+1)%9;
 			switch(this.sens){
 			case 0 :
 				
-				if (this.x+8>750){
+				if (this.x+8*a>750){
 					this.x=750;
 					this.sens = 1;
 				}
 				else{
-					this.x=this.x+8;
+					this.x=this.x+8*a;
 				}
 				this.sy=this.direction["Right"];
 				
@@ -90,36 +90,36 @@ var cs = document.getElementById("cv");
 			
 			case 1 :
 				
-				if (this.x-8<0){
+				if (this.x-8*a<0){
 					this.x=0;
 					this.sens = 0;
 				}
 				else{
-					this.x=this.x-8;
+					this.x=this.x-8*a;
 				}
 				this.sy=this.direction["Left"];
 				break;
 
 			case 2 :
 				
-				if (this.y-8<0){
+				if (this.y-8*a<0){
 					this.y=0;
 					this.sens = 3;
 				}
 				else {
-					this.y=this.y-8;
+					this.y=this.y-8*a;
 				}
 				this.sy=this.direction["Up"];
 				break;
 			
 			case 3 :
 				
-				if (this.y+8>550){
+				if (this.y+8*a>550){
 					this.y=550;
 					this.sens = 2;
 				}
 				else {
-					this.y=this.y+8;
+					this.y=this.y+8*a;
 				}
 				this.sy=this.direction["Down"];
 				

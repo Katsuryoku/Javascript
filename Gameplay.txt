@@ -1,0 +1,3 @@
+﻿Règles :
+
+    Type de jeu : plateau/survie
